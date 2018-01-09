@@ -24,6 +24,7 @@ def detuned_filename(filename, suffix):
 parser = argparse.ArgumentParser(description="Tool to change pitch of midi files")
 parser.add_argument('-s', '--shift', type=int, default='-1', help='pitch shift to apply, e.g. -1 to lower 1/2 tone')
 parser.add_argument('-a', '--append', type=str, default="", help='string to append to the filenames')
+parser.add_argument('-f', '--force', action='store_true', help='allow in-place conversion (same filename)')
 parser.add_argument('file', type=str, nargs='+', help='list of files to convert - wildcards allowed')
 
 cmdlineArgs = parser.parse_args()
@@ -38,6 +39,9 @@ if suffix == "":
 
 for file in flat_filelist:
     print("Processing %s ..." % file)
-    detune_file(file, detuned_filename(file, suffix), cmdlineArgs.shift)
+    if cmdlineArgs.force:
+        detune_file(file, file, cmdlineArgs.shift)
+    else:
+        detune_file(file, detuned_filename(file, suffix), cmdlineArgs.shift)
     print(" done.")
     
