@@ -1,4 +1,33 @@
 from mido import MidiFile
+
+# Mido is available on the web ; use pip install mido
+
+#Note that some midi files refused to load with mido due to a non-standard key signature (meta) message.
+#I modified the function  MetaSpec_key_signature of the file meta.py as follows (line 17, 18)
+
+# class MetaSpec_key_signature(MetaSpec):
+    # type_byte = 0x59
+    # attributes = ['key']
+    # defaults = ['C']
+
+    # def decode(self, message, data):
+        # key = signed('byte', data[0])
+        # mode = data[1]
+        # if mode not in [0,1]:
+            # # Happened in some files : mode is -1 (not found in specs) ==> ignoring
+            # mode = 0
+        # message.key = _key_signature_decode[(key, mode)]
+
+    # def encode(self, message):
+        # key, mode = _key_signature_encode[message.key]
+        # return [unsigned('byte', key), mode]
+
+    # def check(self, name, value):
+        # if not value in _key_signature_encode:
+            # raise ValueError('invalid key {!r}'.format(value))
+
+
+
 import argparse
 import glob
 import os.path
